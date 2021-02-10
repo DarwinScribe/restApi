@@ -9,6 +9,7 @@ user_put_args.add_argument("fio", type=str, help='FIO', required=True)
 
 users = {}
 
+#методы для проверки наличия или отсутвия пользователя
 def abort_if_user_doesnt_exist(user_id):
 		if user_id not in users:
 			abort(404, message='user doesnt exist')
@@ -17,6 +18,7 @@ def abort_if_user_exists(user_id):
 	if user_id in users:
 		abort(409, message='user already exists')
 
+#класс user с реализацией основных операций
 class User(Resource):
 
 	def get(self, user_id):
