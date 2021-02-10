@@ -1,8 +1,6 @@
-from flask import Flask, Blueprint, render_template
+from flask import Flask
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
-
-second = Blueprint("db", __name__, static_folder="static", template_folder="templates")
 
 app = Flask(__name__)
 api = Api(app)
