@@ -2,11 +2,13 @@ from flask import Flask
 from flask_restful import Api, Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 
+
 app = Flask(__name__)
 api = Api(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 db = SQLAlchemy(app)
 
+#класс для создания модели сущности в базе
 class UserModel(db.Model):
 	id =  db.Column(db.Integer, primary_key=True)
 	fio = db.Column(db.String(100), nullable=False)
@@ -14,7 +16,6 @@ class UserModel(db.Model):
 
 	def __repr__(self):
 		return f"User(name = {fio})"
-db.create_all()
 
 user_put_args = reqparse.RequestParser()
 user_put_args.add_argument("fio", type=str, help='FIO', required=True)
@@ -26,7 +27,10 @@ resource_fields = {
 	'id': fields.Integer,
 	'fio': fields.String
 }
-
+#класс user реализующий методы вставки, удаления, обноления и получения данных
+#данные проходят через resource_fields и передаются в нужном формате в класс UserModel,
+#в мотдах на обновление и вставку данных, полученная из запроса инофрмация проходит через reqparse.RequestParser()
+#тем самым улучшая доступ к информации, а случае с вставкой делает обязательным ввод фио
 class User(Resource):
 	@marshal_with(resource_fields)
 	def get(self, user_id):
@@ -69,3 +73,7 @@ class User(Resource):
 
 
 api.add_resource(User, "/user/<int:user_id>")
+
+if __name__ == "__main__":
+	app.run(debug=True)
+
